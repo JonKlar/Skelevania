@@ -42,11 +42,43 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	const HeroSS = __webpack_require__(1);
+	const SkeletonSS = __webpack_require__(2);
+	const stage = new createjs.Stage("Canvas");
+	
+	let hero = new createjs.Sprite(HeroSS);
+	hero.x = 100;
+	hero.y = 529;
+	
+	
+	hero.addEventListener("click", handleClick);
+	function handleClick(){
+	hero.gotoAndPlay("attack");
+	}
+	
+	
+	let skele = new createjs.Sprite(SkeletonSS);
+	skele.x = 600;
+	skele.y = 540;
+	skele.scaleX = 1.3;
+	skele.scaleY = 1.3;
+	
+	
+	stage.addChild(hero);
+	stage.addChild(skele);
+	hero.gotoAndPlay("runRight");
+	skele.gotoAndPlay("walkRight");
+	createjs.Ticker.setFPS(10);
+	createjs.Ticker.addEventListener("tick", stage);
+
+
+/***/ },
+/* 1 */
 /***/ function(module, exports) {
 
-	
-	const stage = new createjs.Stage("Canvas");
-	let HeroSpriteSheet = new createjs.SpriteSheet({
+	const HeroSS = new createjs.SpriteSheet({
 	  "images": ["assets/sprites/hero_pixel_sheet.png"],
 	  "frames": [
 	    // x, y, width, height, imageIndex*, regX*, regY*
@@ -95,8 +127,14 @@
 	    },
 	  }
 	});
-	
-	let SkeletonSpriteSheet = new createjs.SpriteSheet({
+	module.exports = HeroSS;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+	const SkeletonSS = new createjs.SpriteSheet({
 	  "images": ["assets/sprites/skeleton_pixel_sheet.png"],
 	  "frames": {
 	    height: 32,
@@ -116,58 +154,7 @@
 	  }
 	});
 	
-	let hero = new createjs.Sprite(HeroSpriteSheet);
-	hero.x = 100;
-	hero.y = 529;
-	hero.scaleX = 1.2;
-	hero.scaleY = 1.2;
-	
-	let hero2 = new createjs.Sprite(HeroSpriteSheet);
-	hero2.x = 200;
-	hero2.y = 529;
-	
-	let hero3 = new createjs.Sprite(HeroSpriteSheet);
-	hero3.y = 529;
-	
-	let hero4 = new createjs.Sprite(HeroSpriteSheet);
-	hero4.x = 400;
-	hero4.y = 529;
-	
-	let hero5 = new createjs.Sprite(HeroSpriteSheet);
-	hero5.x = 300;
-	hero5.y = 529;
-	hero5.regX = 20;
-	hero5.scaleX = -1;
-	
-	let hero6 = new createjs.Sprite(HeroSpriteSheet);
-	hero6.x = 500;
-	hero6.y = 529;
-	
-	let skele = new createjs.Sprite(SkeletonSpriteSheet);
-	skele.x = 600;
-	skele.y = 540;
-	skele.scaleX = 1.5;
-	skele.scaleY = 1.5;
-	
-	
-	stage.addChild(hero);
-	stage.addChild(hero2);
-	stage.addChild(hero3);
-	stage.addChild(hero4);
-	stage.addChild(hero5);
-	stage.addChild(hero6);
-	stage.addChild(skele);
-	hero.gotoAndPlay("runRight");
-	hero2.gotoAndPlay("runLeft");
-	hero3.gotoAndPlay("stand");
-	hero4.gotoAndPlay("attack");
-	hero5.gotoAndPlay("attack");
-	hero6.gotoAndPlay("jump");
-	skele.gotoAndPlay("walkRight");
-	createjs.Ticker.setFPS(10);
-	createjs.Ticker.addEventListener("tick", stage);
-	
-	//Update stage will render next frame
+	module.exports = SkeletonSS;
 
 
 /***/ }
