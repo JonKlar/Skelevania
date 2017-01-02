@@ -6,10 +6,23 @@ const themeMusic = new Audio('./assets/sounds/68-gerudo-valley.mp3');
 const swordSlash = new Audio('./assets/sounds/sword-slash1.mp3');
 const jumpSound = new Audio('./assets/sounds/OOT_YoungLink_Jump1.wav');
 const reviveSound = new Audio('./assets/sounds/backwards_smw_stomp_bones.wav');
+const hitSound = new Audio('./assets/sounds/hitSound.wav');
+const textBox = document.getElementById("text-box");
+const textBox2 = document.getElementById("text-box2");
+const TextLines2 = require('./lib/text_lines');
+const clickToStart = document.getElementById("start");
+const overlay = document.getElementById("overlay");
 themeMusic.volume = 0.2;
 jumpSound.volume = 0.3;
 swordSlash.volume = 0.1;
-themeMusic.play();
+hitSound.volume = 0.1;
+
+
+clickToStart.addEventListener("click", (event) => {
+  overlay.classList.add("closed");
+  themeMusic.play();
+  skele.active = true;
+});
 
 
 
@@ -87,6 +100,7 @@ hero.regX = 16;
 
 
 let skele = new createjs.Sprite(SkeletonSS);
+skele.active = false;
 skele.dead = false;
 skele.deadTime = 0;
 skele.deathCounter = 0;
@@ -140,6 +154,7 @@ function checkHit(skeleton) {
       swordSlash.play();
     } else {
       skeleton.hp -= 10;
+      hitSound.play();
     }
   }
 }
@@ -160,18 +175,23 @@ function updateSkeleton(skeleton) {
         skeleton.gotoAndPlay("collapse");
         collapseSound.play();
         skeleton.dead = true;
+        if (skeleton.active) {
+          skeleton.deathCounter += 1;
+        }
+        updateTextBox();
         skeleton.y = 393;
       }
     } else {
       skeleton.deadTime += 1;
-      if (skeleton.deadTime > 40) {
+      if (skeleton.deadTime > 60) {
         skeleton.gotoAndPlay("revive");
         reviveSound.play();
         skeleton.y = 384;
         skeleton.hp = 100;
         skeleton.dead = false;
+        updateTextBox();
         skeleton.deadTime = 0;
-      } else if (skeleton.deadTime > 20)
+      } else if (skeleton.deadTime > 40)
         if (skeleton.deadTime % 2 === 0) {
           skeleton.x += 5;
       } else {
@@ -179,6 +199,22 @@ function updateSkeleton(skeleton) {
       }
 
     }
+}
+
+function updateTextBox() {
+  if (skele.dead === true) {
+    textBox.classList.add('pre-animation');
+    textBox2.classList.add('pre-animation');
+    textBox.innerHTML = textLines[skele.deathCounter][0];
+    textBox2.innerHTML = textLines[skele.deathCounter][1];
+    setTimeout( () => {
+    textBox.classList.remove('pre-animation');
+    textBox2.classList.remove('pre-animation');
+    }, 100);
+  } else {
+    textBox.innerHTML = "";
+    textBox2.innerHTML = "";
+  }
 }
 
 
@@ -190,3 +226,23 @@ function handleTick(){
   });
   stage.update();
 }
+
+
+const textLines = {
+  0: ["", ""],
+  1: ["Why are you doing this?", ""],
+  2: ["I have done nothing to provoke you ..", "in all this time .."],
+  3: ["We were friends once weren't we?", " I can hardly remember .."],
+  4: ["Do you even remember why you are", "doing this?"],
+  5: ["Of course you do.  How could you", "ever forget ..her .."],
+  6: ["How long are you planning on keeping", "me here?"],
+  7: ["I have a family dammit!", ""],
+  8: ["At least, I did .. It's been so long."],
+  9: ["I wonder where they are now.  Are", "they thinking of me?"],
+  10: ["I miss her too you know, you", "don't have a monopoly on loss"],
+  11: ["What happened was an accident!", "It wasn't my fault!"],
+  12: ["It wasn't my fault ..", ""],
+  13: ["SAY SOMETHING!!!", ""],
+  14: ["Please, you've been killing me", "for over 2000 years, just say something"],
+
+};
