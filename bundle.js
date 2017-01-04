@@ -283,7 +283,7 @@
 	  5: ["Of course you do.  How could you", "ever forget ..her .."],
 	  6: ["How long are you planning on keeping", "me here?"],
 	  7: ["I have a family dammit!", ""],
-	  8: ["At least, I did .. It's been so long."],
+	  8: ["At least, I did .. It's been so long.", ""],
 	  9: ["I wonder where they are now.  Are", "they thinking of me?"],
 	  10: ["I miss her too you know, you", "don't have a monopoly on loss"],
 	  11: ["What happened was an accident!", "It wasn't my fault!"],
