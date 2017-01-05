@@ -9,13 +9,15 @@ const reviveSound = new Audio('./assets/sounds/backwards_smw_stomp_bones.wav');
 const hitSound = new Audio('./assets/sounds/hitSound.wav');
 const textBox = document.getElementById("text-box");
 const textBox2 = document.getElementById("text-box2");
-const TextLines2 = require('./lib/text_lines');
+const TextLines = require('./lib/text_lines');
 const clickToStart = document.getElementById("start");
 const overlay = document.getElementById("overlay");
+const Controls = require('./lib/controls');
 themeMusic.volume = 0.2;
 jumpSound.volume = 0.3;
 swordSlash.volume = 0.1;
 hitSound.volume = 0.1;
+
 
 
 clickToStart.addEventListener("click", (event) => {
@@ -33,62 +35,6 @@ const heldKeys = {
   "ArrowLeft": false,
 };
 
-window.addEventListener("keydown",(event) => {
-  event.preventDefault();
-  const key = event.key;
-  switch (key) {
-    case "d":
-      if (heldKeys.d === false) {
-        hero.hit19 = false;
-        if (hero.y !== 345) {
-          hero.gotoAndPlay("attackJump");
-        } else if (heldKeys.ArrowRight === false && heldKeys.ArrowLeft === false) {
-        hero.gotoAndPlay("attackStand");
-        } else {
-        hero.gotoAndPlay("attackRun");
-        }
-      }
-      heldKeys.d = true;
-      break;
-    case "ArrowRight":
-      if (heldKeys.ArrowRight === false && hero.y === 345){
-        hero.scaleX = 1;
-        hero.gotoAndPlay("runRight");
-        hero.vX = 8;
-        heldKeys.ArrowRight = true;
-      }
-      break;
-    case "ArrowLeft":
-      if (hero.y === 345 && heldKeys.ArrowLeft === false) {
-        hero.scaleX = -1;
-        hero.gotoAndPlay("runRight");
-        hero.vX = -8;
-        heldKeys["ArrowLeft"] = true;
-      }
-      break;
-    case " ":
-      if (hero.y === 345) {
-        jumpSound.play();
-        hero.gotoAndPlay("jump");
-        hero.vY = -20;
-      }
-  }
-});
-
-window.addEventListener("keyup", (event) => {
-  event.preventDefault();
-  const key = event.key;
-  heldKeys[key] = false;
-  switch (key) {
-    case "ArrowRight":
-    case "ArrowLeft":
-    if (hero.y === 345 && heldKeys.ArrowLeft === false && heldKeys.ArrowRight === false){
-      hero.gotoAndPlay("stand");
-      hero.vX = 0;
-    }
-      break;
-  }
-});
 
 let hero = new createjs.Sprite(HeroSS);
 hero.hit19 = false;
@@ -98,6 +44,7 @@ hero.vX = 0;
 hero.vY = 0;
 hero.regX = 16;
 
+Controls(hero, heldKeys, jumpSound);
 
 let skele = new createjs.Sprite(SkeletonSS);
 skele.active = false;
@@ -111,6 +58,7 @@ skele.vX = 10;
 skele.vY = 0;
 skele.scaleX = 1.2;
 skele.scaleY = 1.2;
+skele.hitTimer = 5;
 
 const skeletons = [skele];
 
@@ -124,6 +72,11 @@ createjs.Ticker.addEventListener("tick", handleTick);
 function updateHero() {
   hero.x += hero.vX;
   hero.y += hero.vY;
+  if (hero.x > 810) {
+    hero.x = -10;
+  } else if (hero.x < -10){
+    hero.x = 810;
+  }
   if (hero.y < 345){
     hero.vY += 4;
   } else if (hero.y > 345) {
@@ -148,6 +101,7 @@ function checkHit(skeleton) {
   if (hero.currentFrame === 19 && Math.abs(hero.x - (skeleton.x)) < 65) {
     hero.hit19 = true;
     skeleton.hp -= 10;
+    handleHit();
   } else if (hero.currentFrame === 20 && Math.abs(hero.x - (skeleton.x)) < 75){
     if (hero.hit19 === false) {
       skeleton.hp -= 100;
@@ -156,13 +110,32 @@ function checkHit(skeleton) {
       skeleton.hp -= 10;
       hitSound.play();
     }
+    handleHit();
   }
+}
+
+function handleHit() {
+  skele.vX = 15 * ((skele.x - hero.x) / Math.abs(skele.x - hero.x));
+  skele.vY = -10;
+  skele.hitTimer = 0;
 }
 
 function updateSkeleton(skeleton) {
     if (skeleton.dead === false) {
       skeleton.x += skeleton.vX;
-      if (skeleton.x > 600){
+      skeleton.y += skeleton.vY;
+      if (skeleton.y < 384){
+        skeleton.vY += 7;
+      } else if (skeleton.y > 384) {
+        skeleton.y = 384;
+        skeleton.vY = 0;
+      }
+      if (skeleton.hitTimer < 4) {
+        skeleton.hitTimer += 1;
+      } else {
+        skeleton.vX = 10 * skeleton.scaleX;
+      }
+      if (skeleton.x > 800){
         skeleton.scaleX = -1.2;
         skeleton.vX = -10;
       } else if (skeleton.x < 0){
@@ -180,6 +153,8 @@ function updateSkeleton(skeleton) {
         }
         updateTextBox();
         skeleton.y = 393;
+        skeleton.vY = 0;
+        skeleton.hitTimer = 5;
       }
     } else {
       skeleton.deadTime += 1;
@@ -205,8 +180,8 @@ function updateTextBox() {
   if (skele.dead === true) {
     textBox.classList.add('pre-animation');
     textBox2.classList.add('pre-animation');
-    textBox.innerHTML = textLines[skele.deathCounter][0];
-    textBox2.innerHTML = textLines[skele.deathCounter][1];
+    textBox.innerHTML = TextLines[skele.deathCounter][0];
+    textBox2.innerHTML = TextLines[skele.deathCounter][1];
     setTimeout( () => {
     textBox.classList.remove('pre-animation');
     textBox2.classList.remove('pre-animation');
@@ -226,23 +201,3 @@ function handleTick(){
   });
   stage.update();
 }
-
-
-const textLines = {
-  0: ["", ""],
-  1: ["Why are you doing this?", ""],
-  2: ["I have done nothing to provoke you ..", "in all this time .."],
-  3: ["We were friends once weren't we?", " I can hardly remember .."],
-  4: ["Do you even remember why you are", "doing this?"],
-  5: ["Of course you do.  How could you", "ever forget ..her .."],
-  6: ["How long are you planning on keeping", "me here?"],
-  7: ["I have a family dammit!", ""],
-  8: ["At least, I did .. It's been so long.", ""],
-  9: ["I wonder where they are now.  Are", "they thinking of me?"],
-  10: ["I miss her too you know, you", "don't have a monopoly on loss"],
-  11: ["What happened was an accident!", "It wasn't my fault!"],
-  12: ["It wasn't my fault ..", ""],
-  13: ["SAY SOMETHING!!!", ""],
-  14: ["Please, you've been killing me", "for over 2000 years, just say something"],
-
-};
