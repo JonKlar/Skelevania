@@ -2,7 +2,7 @@ const HeroSS = require('./lib/hero_sheet');
 const SkeletonSS = require('./lib/skeleton_sheet');
 const stage = new createjs.Stage("Canvas");
 const collapseSound = new Audio('./assets/sounds/smw_stomp_bones.wav');
-const themeMusic = new Audio('./assets/sounds/68-gerudo-valley.mp3');
+const themeMusic = new Audio('./assets/sounds/21-dance-of-pearls.mp3');
 const swordSlash = new Audio('./assets/sounds/sword-slash1.mp3');
 const jumpSound = new Audio('./assets/sounds/OOT_YoungLink_Jump1.wav');
 const reviveSound = new Audio('./assets/sounds/backwards_smw_stomp_bones.wav');
@@ -14,10 +14,12 @@ const clickToStart = document.getElementById("start");
 const overlay = document.getElementById("overlay");
 const Controls = require('./lib/controls');
 const Cycle = document.getElementById("cycle");
+const wolfHowl = new Audio('./assets/sounds/wolf3.mp3');
 themeMusic.volume = 0.2;
 jumpSound.volume = 0.3;
 swordSlash.volume = 0.1;
 hitSound.volume = 0.1;
+wolfHowl.volume = 0.1;
 
 
 clickToStart.addEventListener("click", (event) => {
@@ -181,7 +183,7 @@ function updateTextBox() {
   if (skele.dead === true) {
     textBox.classList.add('pre-animation');
     textBox2.classList.add('pre-animation');
-    textBox.innerHTML = TextLines[skele.deathCounter][0];
+    textBox.innerHTML = `${TextLines[skele.deathCounter][0]}`;
     textBox2.innerHTML = TextLines[skele.deathCounter][1];
     setTimeout( () => {
     textBox.classList.remove('pre-animation');
@@ -194,9 +196,11 @@ function updateTextBox() {
 }
 
 function dayCycle() {
-  if (Time % 200 == 0) {
-
+  if (Time % 200 === 0) {
     Cycle.classList.toggle("night");
+    if (Time % 400 !== 0) {
+      wolfHowl.play();
+    }
   }
 
 }

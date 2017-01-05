@@ -48,7 +48,7 @@
 	const SkeletonSS = __webpack_require__(4);
 	const stage = new createjs.Stage("Canvas");
 	const collapseSound = new Audio('./assets/sounds/smw_stomp_bones.wav');
-	const themeMusic = new Audio('./assets/sounds/68-gerudo-valley.mp3');
+	const themeMusic = new Audio('./assets/sounds/21-dance-of-pearls.mp3');
 	const swordSlash = new Audio('./assets/sounds/sword-slash1.mp3');
 	const jumpSound = new Audio('./assets/sounds/OOT_YoungLink_Jump1.wav');
 	const reviveSound = new Audio('./assets/sounds/backwards_smw_stomp_bones.wav');
@@ -60,10 +60,12 @@
 	const overlay = document.getElementById("overlay");
 	const Controls = __webpack_require__(7);
 	const Cycle = document.getElementById("cycle");
+	const wolfHowl = new Audio('./assets/sounds/wolf3.mp3');
 	themeMusic.volume = 0.2;
 	jumpSound.volume = 0.3;
 	swordSlash.volume = 0.1;
 	hitSound.volume = 0.1;
+	wolfHowl.volume = 0.1;
 	
 	
 	clickToStart.addEventListener("click", (event) => {
@@ -227,7 +229,7 @@
 	  if (skele.dead === true) {
 	    textBox.classList.add('pre-animation');
 	    textBox2.classList.add('pre-animation');
-	    textBox.innerHTML = TextLines[skele.deathCounter][0];
+	    textBox.innerHTML = `${TextLines[skele.deathCounter][0]}`;
 	    textBox2.innerHTML = TextLines[skele.deathCounter][1];
 	    setTimeout( () => {
 	    textBox.classList.remove('pre-animation');
@@ -240,9 +242,11 @@
 	}
 	
 	function dayCycle() {
-	  if (Time % 200 == 0) {
-	
+	  if (Time % 200 === 0) {
 	    Cycle.classList.toggle("night");
+	    if (Time % 400 !== 0) {
+	      wolfHowl.play();
+	    }
 	  }
 	
 	}
@@ -376,17 +380,17 @@
 
 	const TextLines = {
 	  1: ["Why are you doing this?", ""],
-	  2: ["I have done nothing to provoke you…", "in all this time…"],
-	  3: ["We were friends once weren't we?", " I can hardly remember…"],
+	  2: ["I have done nothing to provoke you", "in all this time . . ."],
+	  3: ["We were friends once weren't we?", " I can hardly remember . . ."],
 	  4: ["Do you even remember why you are", "doing this?"],
-	  5: ["Of course you do.  How could you", "ever forget….her…"],
+	  5: ["Of course you do.  How could you", "ever forget . . . her . . ."],
 	  6: ["How long are you planning on keeping", "me here?"],
 	  7: ["I have a family dammit!", ""],
-	  8: ["At least, I did… It's been so long.", ""],
-	  9: ["I wonder where they are now.  Are", "they thinking of me?"],
-	  10: ["I miss her too you know, you", "don't have a monopoly on loss"],
+	  8: ["At least, I did . . . It's been", "so long . . ."],
+	  9: ["I wonder where they are now . . .  Are", "they thinking of me?"],
+	  10: ["I miss her too you know . . . you", "don't have a monopoly on loss"],
 	  11: ["What happened was an accident!", " It wasn't my fault!"],
-	  12: ["It wasn't my fault…", ""],
+	  12: ["It wasn't my fault . . .", ""],
 	  13: ["SAY SOMETHING!!!", ""],
 	  14: ["Please, you've been killing me", "for over 2000 years, just say something"],
 	
