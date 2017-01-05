@@ -13,17 +13,18 @@ const TextLines = require('./lib/text_lines');
 const clickToStart = document.getElementById("start");
 const overlay = document.getElementById("overlay");
 const Controls = require('./lib/controls');
+const Cycle = document.getElementById("cycle");
 themeMusic.volume = 0.2;
 jumpSound.volume = 0.3;
 swordSlash.volume = 0.1;
 hitSound.volume = 0.1;
 
 
-
 clickToStart.addEventListener("click", (event) => {
   overlay.classList.add("closed");
   themeMusic.play();
   skele.active = true;
+  Controls(hero, heldKeys, jumpSound);
 });
 
 
@@ -44,7 +45,6 @@ hero.vX = 0;
 hero.vY = 0;
 hero.regX = 16;
 
-Controls(hero, heldKeys, jumpSound);
 
 let skele = new createjs.Sprite(SkeletonSS);
 skele.active = false;
@@ -62,6 +62,7 @@ skele.hitTimer = 5;
 
 const skeletons = [skele];
 
+let Time = 0;
 stage.addChild(hero);
 stage.addChild(skele);
 hero.gotoAndPlay("stand");
@@ -192,12 +193,27 @@ function updateTextBox() {
   }
 }
 
+function dayCycle() {
+  if (Time % 200 == 0) {
 
+    Cycle.classList.toggle("night");
+  }
+
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "p") {
+    dayCycle();
+  }
+});
 
 function handleTick(){
+  Time += 1;
+  console.log(Time);
   updateHero();
   skeletons.forEach((skeleton) => {
     updateSkeleton(skeleton);
   });
+  dayCycle();
   stage.update();
 }

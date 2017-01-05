@@ -59,17 +59,18 @@
 	const clickToStart = document.getElementById("start");
 	const overlay = document.getElementById("overlay");
 	const Controls = __webpack_require__(7);
+	const Cycle = document.getElementById("cycle");
 	themeMusic.volume = 0.2;
 	jumpSound.volume = 0.3;
 	swordSlash.volume = 0.1;
 	hitSound.volume = 0.1;
 	
 	
-	
 	clickToStart.addEventListener("click", (event) => {
 	  overlay.classList.add("closed");
 	  themeMusic.play();
 	  skele.active = true;
+	  Controls(hero, heldKeys, jumpSound);
 	});
 	
 	
@@ -90,7 +91,6 @@
 	hero.vY = 0;
 	hero.regX = 16;
 	
-	Controls(hero, heldKeys, jumpSound);
 	
 	let skele = new createjs.Sprite(SkeletonSS);
 	skele.active = false;
@@ -108,6 +108,7 @@
 	
 	const skeletons = [skele];
 	
+	let Time = 0;
 	stage.addChild(hero);
 	stage.addChild(skele);
 	hero.gotoAndPlay("stand");
@@ -238,13 +239,28 @@
 	  }
 	}
 	
+	function dayCycle() {
+	  if (Time % 200 == 0) {
 	
+	    Cycle.classList.toggle("night");
+	  }
+	
+	}
+	
+	window.addEventListener("keydown", (e) => {
+	  if (e.key === "p") {
+	    dayCycle();
+	  }
+	});
 	
 	function handleTick(){
+	  Time += 1;
+	  console.log(Time);
 	  updateHero();
 	  skeletons.forEach((skeleton) => {
 	    updateSkeleton(skeleton);
 	  });
+	  dayCycle();
 	  stage.update();
 	}
 
@@ -360,17 +376,17 @@
 
 	const TextLines = {
 	  1: ["Why are you doing this?", ""],
-	  2: ["I have done nothing to provoke you...", "in all this time..."],
-	  3: ["We were friends once weren't we?", " I can hardly remember...."],
+	  2: ["I have done nothing to provoke you…", "in all this time…"],
+	  3: ["We were friends once weren't we?", " I can hardly remember…"],
 	  4: ["Do you even remember why you are", "doing this?"],
-	  5: ["Of course you do.  How could you", "ever forget....her..."],
+	  5: ["Of course you do.  How could you", "ever forget….her…"],
 	  6: ["How long are you planning on keeping", "me here?"],
 	  7: ["I have a family dammit!", ""],
-	  8: ["At least, I did... It's been so long."],
+	  8: ["At least, I did… It's been so long.", ""],
 	  9: ["I wonder where they are now.  Are", "they thinking of me?"],
 	  10: ["I miss her too you know, you", "don't have a monopoly on loss"],
 	  11: ["What happened was an accident!", " It wasn't my fault!"],
-	  12: ["It wasn't my fault...", ""],
+	  12: ["It wasn't my fault…", ""],
 	  13: ["SAY SOMETHING!!!", ""],
 	  14: ["Please, you've been killing me", "for over 2000 years, just say something"],
 	
