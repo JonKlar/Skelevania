@@ -15,6 +15,9 @@ const overlay = document.getElementById("overlay");
 const Controls = require('./lib/controls');
 const Cycle = document.getElementById("cycle");
 const wolfHowl = new Audio('./assets/sounds/wolf3.mp3');
+const EndScreen = document.getElementById("end");
+const Canvas = document.getElementById("Canvas");
+const Credits = document.getElementById("credits");
 themeMusic.volume = 0.2;
 jumpSound.volume = 0.3;
 swordSlash.volume = 0.1;
@@ -27,6 +30,12 @@ clickToStart.addEventListener("click", (event) => {
   themeMusic.play();
   skele.active = true;
   Controls(hero, heldKeys, jumpSound);
+  setTimeout(()=>{
+    EndScreen.classList.add("true");
+    Canvas.classList.add("clear");
+    Credits.classList.add("scroll-up");
+    createjs.Ticker.pause();
+  }, 155000);
 });
 
 
@@ -213,7 +222,6 @@ window.addEventListener("keydown", (e) => {
 
 function handleTick(){
   Time += 1;
-  console.log(Time);
   updateHero();
   skeletons.forEach((skeleton) => {
     updateSkeleton(skeleton);

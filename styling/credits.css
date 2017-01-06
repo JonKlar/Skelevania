@@ -1,0 +1,54 @@
+.credits {
+  color: black;
+}
+
+.credits.scroll-up {
+ height: 100%;
+ overflow: hidden;
+ position: relative;
+ background: transparent;
+ color: white;
+}
+.scroll-up p {
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ margin: 0;
+ line-height: 50px;
+ text-align: center;
+ /* Starting position */
+ -moz-transform:translateY(-130%);
+ -webkit-transform:translateY(-220%);
+ transform:translateY(-220%);
+ /* Apply animation to this element */
+ -moz-animation: scroll-up 20s linear 1;
+ -webkit-animation: scroll-up 20s linear 1;
+ animation: scroll-up 20s linear 1;
+ overflow: visible;
+}
+/* Move it (define the animation) */
+@-moz-keyframes scroll-up {
+ 0%   { -moz-transform: translateY(150%); }
+ 100% { -moz-transform: translateY(-220%); }
+}
+@-webkit-keyframes scroll-up {
+ 0%   { -webkit-transform: translateY(150%); }
+ 100% { -webkit-transform: translateY(-220%); }
+}
+@keyframes scroll-up {
+ 0%   {
+ -moz-transform: translateY(150%); /* Browser bug fix */
+ -webkit-transform: translateY(150%); /* Browser bug fix */
+ transform: translateY(150%);
+ }
+ 100% {
+ -moz-transform: translateY(-220%); /* Browser bug fix */
+ -webkit-transform: translateY(-220%); /* Browser bug fix */
+ transform: translateY(-220%);
+ }
+}
+</style>
+
+<div class="scroll-up">
+<p>Scroll up... </p>
+</div>

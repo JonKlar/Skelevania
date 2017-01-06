@@ -61,6 +61,9 @@
 	const Controls = __webpack_require__(7);
 	const Cycle = document.getElementById("cycle");
 	const wolfHowl = new Audio('./assets/sounds/wolf3.mp3');
+	const EndScreen = document.getElementById("end");
+	const Canvas = document.getElementById("Canvas");
+	const Credits = document.getElementById("credits");
 	themeMusic.volume = 0.2;
 	jumpSound.volume = 0.3;
 	swordSlash.volume = 0.1;
@@ -73,6 +76,12 @@
 	  themeMusic.play();
 	  skele.active = true;
 	  Controls(hero, heldKeys, jumpSound);
+	  setTimeout(()=>{
+	    EndScreen.classList.add("true");
+	    Canvas.classList.add("clear");
+	    Credits.classList.add("scroll-up");
+	    createjs.Ticker.pause();
+	  }, 155000);
 	});
 	
 	
@@ -259,7 +268,6 @@
 	
 	function handleTick(){
 	  Time += 1;
-	  console.log(Time);
 	  updateHero();
 	  skeletons.forEach((skeleton) => {
 	    updateSkeleton(skeleton);

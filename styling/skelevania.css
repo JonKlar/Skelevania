@@ -17,7 +17,14 @@ canvas {
   margin-left: 50%;
   transform: translateX(-50%);
   border-radius: 5px;
+  transition: opacity 4s ease-in-out;
+    -webkit-transition: opacity 4s ease-in-out;
+    -moz-transition: opacity 4s ease-in-out;
+    -o-transition: opacity 4s ease-in-out;
+}
 
+canvas.clear {
+  opacity: 0;
 }
 
 .wrapper {
@@ -45,7 +52,7 @@ canvas {
   bottom: 0;
   left: 0;
   right: 0;
-  opacity: 1
+  opacity: 1;
   transition: opacity 2s ease-in-out;
     -webkit-transition: opacity 2s ease-in-out;
     -moz-transition: opacity 2s ease-in-out;
@@ -56,6 +63,24 @@ canvas {
   opacity: 0;
 }
 
+.end {
+  background: black;
+  position: absolute;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  transition: opacity 2s ease-in-out;
+    -webkit-transition: opacity 2s ease-in-out;
+    -moz-transition: opacity 2s ease-in-out;
+    -o-transition: opacity 2s ease-in-out;
+}
+
+.end.true {
+  opacity: 1;
+}
 
 
 div.ff7{
@@ -134,4 +159,17 @@ p.pre-animation {
 
 #start:hover {
   cursor: pointer;
+}
+
+.credit {
+  text-align: center;
+  font-size: 16px;
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+a {
+  display: block;
+  font-size: 16px;
+  text-align: center;
 }
